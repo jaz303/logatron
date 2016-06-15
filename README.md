@@ -56,3 +56,11 @@ Thereafter you can either `LOG` a message or `SET` a key/value pair:
     LOG this is my log message\n
     SET foo bar\n
     SET foo keys can have multiple words too!\n
+
+That's all there is to it.
+
+## TODO
+
+  * startup script
+  * HTTP interface for status reports
+  * websocket streaming
