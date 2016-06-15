@@ -1,0 +1,28 @@
+{
+  "name": "logatron",
+  "version": "1.0.0",
+  "description": "In-memory logging server with network support and per-client state dictionary",
+  "main": "index.js",
+  "dependencies": {
+    "CBuffer": "^1.1.1",
+    "byline": "^4.2.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jaz303/logatron.git"
+  },
+  "keywords": [
+    "log",
+    "server"
+  ],
+  "author": "Jason Frame <jason@onehackoranother.com> (http://jasonframe.co.uk)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jaz303/logatron/issues"
+  },
+  "homepage": "https://github.com/jaz303/logatron#readme"
+}
