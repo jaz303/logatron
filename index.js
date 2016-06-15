@@ -29,7 +29,7 @@ function createInstance(opts) {
             const out = {};
             for (var k in connections) {
                 out[k] = {
-                    connectedAt : connections[k].connectedAt
+                    connectedAt : connections[k].connectedAt,
                     log         : connections[k].log,
                     state       : connections[k].settings
                 };
