@@ -9,9 +9,9 @@ Logatron is a simple in-memory logging server with the following features:
 
 ## Usage
 
-	const logatron = require('logatron');
-	const log = logatron();
-	log.listen(2212, '0.0.0.0');
+    const logatron = require('logatron');
+    const log = logatron();
+    log.listen(2212, '0.0.0.0');
 
 ## API
 
@@ -47,12 +47,12 @@ Logatron's wire protocol is UTF-8, one command per line.
 
 The first thing clients must do is identify:
 
-	IAM bob\n
+    IAM bob\n
 
 If the identify command fails (i.e. a syntax error or a client with the given name is already connected), the server will terminate the connection.
 
 Thereafter you can either `LOG` a message or `SET` a key/value pair:
 
-	LOG this is my log message\n
-	SET foo bar\n
-	SET foo keys can have multiple words too!\n
+    LOG this is my log message\n
+    SET foo bar\n
+    SET foo keys can have multiple words too!\n
