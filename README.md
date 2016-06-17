@@ -41,6 +41,15 @@ Get an array of log entries for client `name`. Each log entry is an array of `[t
 
 Get a the state dictionary for client `name`. Throws an error if no such client exists.
 
+## Events
+
+Logatron instances are `EventEmitters` and emit the following events:
+
+  - `'ready' (clientName)`: a new client has connected and identified
+  - `'log' (clientName, message)`: client `clientName` logged `message`
+  - `'set' (clientName, key, value)`: client `clientName` set `key` to `value`
+  - `'close' (clientNmae): client `clientName` closed its connection
+
 ## Protocol
 
 Logatron's wire protocol is UTF-8, one command per line.
