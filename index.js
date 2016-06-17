@@ -3,6 +3,7 @@
 const net = require('net');
 const byline = require('byline');
 const CBuffer = require('CBuffer');
+const EventEmitter = require('events').EventEmitter;
 
 module.exports = createInstance;
 
@@ -14,41 +15,47 @@ function createInstance(opts) {
     let nextConnectionId = 1;
     const connections = {};
 
+    const instance = new EventEmitter;
+
     const server = net.createServer((socket) => {
-        newConnection(connections, nextConnectionId++, socket, bufferSize);
+        newConnection(instance, connections, nextConnectionId++, socket, bufferSize);
     });
 
-    return {
-        listen: (port, host) => {
-            return server.listen(port, host);
-        },
-        getClientNames: () => {
-            return Object.keys(connections);
-        },
-        getClients: () => {
-            const out = {};
-            for (var k in connections) {
-                out[k] = {
-                    connectedAt : connections[k].connectedAt,
-                    log         : connections[k].log,
-                    state       : connections[k].settings
-                };
-            }
-            return out;
-        },
-        getClientLog: (name) => {
-            if (!(name in connections)) {
-                return _error(name);
-            }
-            return connections[k].log.toArray();
-        },
-        getClientState: (name) => {
-            if (!(name in connections)) {
-                return _error(name);
-            }
-            return connections[k].settings;
+    instance.listen = (port, host) => {
+        return server.listen(port, host);
+    }
+
+    instance.getClientNames = () => {
+        return Object.keys(connections);
+    }
+
+    instance.getClients = () => {
+        const out = {};
+        for (var k in connections) {
+            out[k] = {
+                connectedAt : connections[k].connectedAt,
+                log         : connections[k].log,
+                state       : connections[k].settings
+            };
         }
-    };
+        return out;
+    }
+
+    instance.getClientLog = (name) => {
+        if (!(name in connections)) {
+            return _error(name);
+        }
+        return connections[k].log.toArray();
+    }
+
+    instance.getClientState = (name) => {
+        if (!(name in connections)) {
+            return _error(name);
+        }
+        return connections[k].settings;
+    }
+
+    return instance;
 
     function _error(name) {
         throw new Error("no such client: " + name);
@@ -56,7 +63,7 @@ function createInstance(opts) {
 
 }
 
-function newConnection(conns, id, sock, bufferSize) {
+function newConnection(instance, conns, id, sock, bufferSize) {
 
     const connectedAt = Date.now();
     let state = 'ident';
@@ -74,6 +81,7 @@ function newConnection(conns, id, sock, bufferSize) {
 
     function _teardown() {
         if (name) {
+            instance.emit('close', name);
             delete conns[name];
             name = null;
         }
@@ -95,7 +103,8 @@ function newConnection(conns, id, sock, bufferSize) {
                             log         : log,
                             settings    : settings
                         };
-                        state = 'ready';    
+                        state = 'ready';
+                        instance.emit('ready', name);
                     }
                 } else {
                     sock.destroy();
@@ -104,9 +113,15 @@ function newConnection(conns, id, sock, bufferSize) {
                 break;
             case 'ready':
                 if (line.match(/^LOG\s+([^$]*)$/)) {
-                    log.unshift([Date.now(), RegExp.$1.trim()]);
+                    const now = Date.now();
+                    const msg = RegExp.$1.trim();
+                    log.unshift([now, msg]);
+                    instance.emit('log', name, msg, now);
                 } else if (line.match(/^SET\s+(\w+)\s+([^$]+)/)) {
-                    settings[RegExp.$1] = RegExp.$2.trim();
+                    const key = RegExp.$1;
+                    const value = RegExp.$2.trim();
+                    settings[key] = value;
+                    instance.emit('set', name, key, value);
                 }
                 break;
         }
