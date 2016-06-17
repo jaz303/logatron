@@ -64,3 +64,7 @@ That's all there is to it.
   * startup script
   * HTTP interface for status reports
   * websocket streaming
+
+## License
+
+ISC
