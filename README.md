@@ -48,7 +48,7 @@ Logatron instances are `EventEmitters` and emit the following events:
   - `'ready' (clientName)`: a new client has connected and identified
   - `'log' (clientName, message)`: client `clientName` logged `message`
   - `'set' (clientName, key, value)`: client `clientName` set `key` to `value`
-  - `'close' (clientNmae): client `clientName` closed its connection
+  - `'close' (clientName)`: client `clientName` closed its connection
 
 ## Protocol
 
