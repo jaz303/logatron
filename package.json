@@ -1,6 +1,6 @@
 {
   "name": "logatron",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "In-memory logging server with network support and per-client state dictionary",
   "main": "index.js",
   "dependencies": {
