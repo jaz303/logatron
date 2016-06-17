@@ -116,7 +116,7 @@ function newConnection(instance, conns, id, sock, bufferSize) {
                     const now = Date.now();
                     const msg = RegExp.$1.trim();
                     log.unshift([now, msg]);
-                    instance.emit('log', name, msg, now);
+                    instance.emit('log', name, msg);
                 } else if (line.match(/^SET\s+(\w+)\s+([^$]+)/)) {
                     const key = RegExp.$1;
                     const value = RegExp.$2.trim();
